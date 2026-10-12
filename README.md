@@ -26,7 +26,7 @@ That process helped with:
 
 After multiple additions and modifications I feel like it's about time to do a full manual rewrite in a language I'm actually good at.
 It was a fun exercise in vibe coding, and by now functional enough for nightly backups on my own devices, but it has become big, unwieldy and probably quite inefficient.
-I will keep letting ChatGPT do bug fixes if I find them, but will probably replace it soon with something written in without AI in Python.
+I will keep letting ChatGPT do bug fixes if I find them, but will probably replace it soon with something written in in Python without using AI.
 
 ## Prep
 
