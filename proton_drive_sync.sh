@@ -146,6 +146,28 @@ ensure_remote_dir() {
     done
 }
 
+# Helper: treat "Node not found" as already deleted for trash operations
+trash_ok_or_not_found() {
+    local remote_path="$1"
+    local output status
+
+    output="$("$PROTON_BIN" filesystem trash "$remote_path" 2>&1)"
+    status=$?
+
+    if [[ $status -eq 0 ]]; then
+        return 0
+    fi
+
+    if [[ "$output" == *"Node not found"* ]]; then
+        log "INFO: Remote item already missing: $remote_path"
+        return 0
+    fi
+
+    log "WARN: Failed to trash remote item: $remote_path"
+    log "      Proton output: $output"
+    return 1
+}
+
 log "=== Starting Proton Drive sync evaluation ==="
 
 if [[ ! -d "$LOCAL_BACKUP_DIR" ]]; then
@@ -241,10 +263,9 @@ if [[ "${#deleted_dirs[@]}" -gt 0 ]]; then
     for relpath in "${deleted_dirs_sorted[@]}"; do
         remote_path="${REMOTE_BACKUP_DIR}/${relpath}"
         log "Trashing remote directory: $remote_path"
-        if "$PROTON_BIN" filesystem trash "$remote_path" >/dev/null; then
+        if trash_ok_or_not_found "$remote_path"; then
             ((folders_removed++))
         else
-            log "WARN: Failed to trash remote directory: $remote_path"
             ((errors++))
         fi
     done
@@ -276,10 +297,9 @@ if [[ "${#deleted_files[@]}" -gt 0 ]]; then
     for relpath in "${deleted_files_sorted[@]}"; do
         remote_path="${REMOTE_BACKUP_DIR}/${relpath}"
         log "Trashing remote file: $remote_path"
-        if "$PROTON_BIN" filesystem trash "$remote_path" >/dev/null; then
+        if trash_ok_or_not_found "$remote_path"; then
             ((files_removed++))
         else
-            log "WARN: Failed to trash remote file: $remote_path"
             ((errors++))
         fi
     done
@@ -308,6 +328,19 @@ if [[ "${#new_dirs[@]}" -gt 0 ]]; then
         fi
 
         uploaded_dirs+=("$local_dir")
+    done
+fi
+
+# Upload changed root-level files
+if [[ "${#changed_root_files[@]}" -gt 0 ]]; then
+    for file in "${!changed_root_files[@]}"; do
+        log "Uploading root-level file: $file"
+
+        if upload_file_json "$file" "$REMOTE_BACKUP_DIR"; then
+            ((files_uploaded++))
+        else
+            ((errors++))
+        fi
     done
 fi
 
