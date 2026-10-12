@@ -22,6 +22,12 @@ That process helped with:
 - improving robustness over several revisions
 - working around "unintended features" (interface leaks) in the ChatGPT interface (just for fun, try asking ChatGPT to generate a readme.md file)
 
+### Update
+
+After multiple additions and modifications I feel like it's about time to do a full manual rewrite in a language I'm actually good at.
+It was a fun exercise in vibe coding, and by now functional enough for nightly backups on my own devices, but it has become big, unwieldy and probably quite inefficient.
+I will keep letting ChatGPT do bug fixes if I find them, but will probably replace it soon with something written in without AI in Python.
+
 ## Prep
 
 Before running the script for the first time:
