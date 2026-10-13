@@ -1,3 +1,12 @@
+# THIS PROJECT HAS BEEN ABANDONED
+
+**The original Bash script project documented below is now archived and abandoned.** 
+
+While the "vibe-coded" Bash implementation served as an excellent proof-of-concept for interacting with the Proton Drive CLI, it has been completely replaced by a modern, native **Python rewrite** built entirely from scratch without AI generation. 
+
+The original shell script has been moved to an archived location (`proton-drive-sync-old`), and the the new version ('proton-drive-sync') has taken its place.
+---
+
 # Proton Drive Sync Script
 
 This script synchronizes a local backup folder to Proton Drive.
